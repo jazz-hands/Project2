@@ -13,17 +13,14 @@
     <form action="ProductMaint" method="post">
       <strong>Code: </strong>
       
-        <c:if test="${sessionScope.product.code}">
+        <c:if test="${sessionScope.product.code!=null}">
             <input disabled="true" type="text" name="productCode" value="${sessionScope.product.code}">
             <mma:MarkEmptyField field="${sessionScope.product.code}"/><br>
         </c:if>
-        <c:if test="${sessionScope.product.code}==${null}">
+        <c:if test="${sessionScope.product.code==null}">
             <input type="text" name="productCode" value="">
             <mma:MarkEmptyField field="${sessionScope.product.code}"/><br>
         </c:if>
-
-      <input type="text" name="productCode" value="${sessionScope.product.code}">
-      <mma:MarkEmptyField field="${sessionScope.product.code}"/><br>
       
       <strong>Description: </strong>
       <input type=text name="description" value="${sessionScope.product.description}" id="description">
