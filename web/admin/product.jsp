@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="mma" uri="/WEB-INF/music.tld" %>
 <!DOCTYPE html>
 <html>
@@ -11,6 +12,16 @@
     <h1>Product</h1>
     <form action="ProductMaint" method="post">
       <strong>Code: </strong>
+      
+        <c:if test="${sessionScope.product.code}">
+            <input disabled="true" type="text" name="productCode" value="${sessionScope.product.code}">
+            <mma:MarkEmptyField field="${sessionScope.product.code}"/><br>
+        </c:if>
+        <c:if test="${sessionScope.product.code}==${null}">
+            <input type="text" name="productCode" value="">
+            <mma:MarkEmptyField field="${sessionScope.product.code}"/><br>
+        </c:if>
+
       <input type="text" name="productCode" value="${sessionScope.product.code}">
       <mma:MarkEmptyField field="${sessionScope.product.code}"/><br>
       

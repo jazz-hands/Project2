@@ -1,6 +1,5 @@
 package music.product;
 
-import music.data.ProductIO;
 import music.business.Product;
 import java.io.*;
 import java.util.List;
@@ -47,8 +46,6 @@ public class ProductMaintServlet extends HttpServlet {
             throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        String path = getServletContext().getRealPath("/WEB-INF/products.txt");
-        ProductIO.init(path);
         List<Product> products = ProductDB.selectProducts();
         session.setAttribute("products", products);
 
@@ -85,7 +82,7 @@ public class ProductMaintServlet extends HttpServlet {
             HttpServletResponse response) {
         
         HttpSession session = request.getSession();
-
+        
         String productCode = request.getParameter("productCode");
         String description = request.getParameter("description");
         String priceString = request.getParameter("price");
@@ -96,12 +93,18 @@ public class ProductMaintServlet extends HttpServlet {
         product.setDescription(description);
         product.setPrice(price);
         
-        ProductDB.updateProduct(product);
+        if(ProductDB.productExists(productCode)){
+            Long productId = ProductDB.selectProduct(productCode).getProductId();
+            product.setProductId(productId);
+        }
         
+        ProductDB.updateProduct(product);
+
         List<Product> products = ProductDB.selectProducts();
         session.setAttribute("products", products);
-        
+
         return "/admin/displayProducts.jsp";
+
     }
 
      public String deleteProduct(HttpServletRequest request,
@@ -112,19 +115,15 @@ public class ProductMaintServlet extends HttpServlet {
 
          HttpSession session = request.getSession();
 
-         if(ProductIO.exists(productCode) && productCode!= null) {
-//              store the data in a Product object
-            Product product = new Product();
-            product.setCode(productCode);
-            product.setDescription(ProductDB.selectProduct(productCode).getDescription());
-            product.setPrice(ProductDB.selectProduct(productCode).getPrice());
-            
-            
+         if(ProductDB.productExists(productCode) && productCode!= null) {
+            //store the data in a Product object
+            Product product = ProductDB.selectProduct(productCode);
+            //delete prduct from DB
             ProductDB.deleteProduct(product);
-        
-        List<Product> products = ProductDB.selectProducts();
-        session.setAttribute("products", products);
-
+            //update product list in memory
+            List<Product> products = ProductDB.selectProducts();
+            session.setAttribute("products", products);
+            //reset the session attribute
             session.removeAttribute("product");
          }
          
@@ -140,13 +139,8 @@ public class ProductMaintServlet extends HttpServlet {
 
          HttpSession session = request.getSession();
 
-         if(ProductIO.exists(productCode) && productCode!= null) {
-//              store the data in a Product object
-            Product product = new Product();
-            product.setCode(productCode);
-            product.setDescription(ProductIO.selectProduct(productCode).getDescription());
-            product.setPrice(ProductIO.selectProduct(productCode).getPrice());
-
+         if(ProductDB.productExists(productCode) && productCode!= null) {
+            Product product = ProductDB.selectProduct(productCode);
             session.setAttribute("product", product);
          }
          else {
@@ -156,4 +150,5 @@ public class ProductMaintServlet extends HttpServlet {
         return "/admin/confirm.jsp";
         
      }
+
 }

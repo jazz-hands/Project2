@@ -5,11 +5,6 @@ package music.data;
 * @author jasmi
 */
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -20,27 +15,28 @@ import music.business.Product;
 public class ProductDB {
   
   public static void updateProduct(Product product)
-  {       
+  { 
+    System.out.println("Product code: "+product.getCode());
+    
     if(ProductDB.productExists(product.getCode())) {
-      ProductDB.update(product);
-      ProductIO.updateProduct(product);
+        System.out.println("I'm updating");
+        ProductDB.update(product);
       
     }
     else {
+        System.out.println("I'm inserting");
       ProductDB.insert(product);
-      ProductIO.insertProduct(product);
       
     }
   }
   
   public static void deleteProduct(Product product)
   {       
-    if(ProductIO.exists(product.getCode())) {
-      ProductIO.deleteProduct(product);
+    if(ProductDB.productExists(product.getCode())) {
       ProductDB.remove(product);
     }
     else {
-      ProductIO.updateProduct(product);
+      ProductDB.updateProduct(product);
     }
   }
   
@@ -97,7 +93,7 @@ public class ProductDB {
   
     
   public static void update(Product product) {
-    EntityManager em = DBUtil.getEmFactory().createEntityManager();
+      EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();       
         try {
@@ -128,7 +124,8 @@ public class ProductDB {
   
       public static boolean productExists(String productCode) {
         Product p = selectProduct(productCode);   
-        return p != null;
+        System.out.println("Product Exists: "+(p!=null));
+        return (p != null);
     }
   
 }
