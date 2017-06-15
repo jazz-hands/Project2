@@ -1,8 +1,13 @@
 package music.business;
 
 import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.text.NumberFormat;
 
+@Entity
 public class Product implements Serializable {
 
     private Long productId;
@@ -11,14 +16,18 @@ public class Product implements Serializable {
     private double price;
 
     public Product() {
-        //TODO add constructors.
+        code = "";
+        description = "";
+        price = 0;
     }
 
-    public Long getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long getProductId() {
       return productId;
     }
 
-    public void setId(Long productId) {
+    public void setProductId(Long productId) {
       this.productId = productId;
     }
 

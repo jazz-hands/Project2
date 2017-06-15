@@ -15,7 +15,7 @@ public class ProductMaintServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException {
         
-        String url = "/displayProducts.jsp";
+        String url = "/admin/displayProducts.jsp";
         ServletContext sc = getServletContext();
 
         // get current action
@@ -26,7 +26,7 @@ public class ProductMaintServlet extends HttpServlet {
         }
 
         if (action.equals("displayProducts")) {
-            url = "/displayProducts.jsp";
+            url = "/admin/displayProducts.jsp";
         } else if (action.equals("addProduct")) {
             url = addProduct(request, response);
         } else if (action.equals("updateProduct")) {
@@ -78,7 +78,7 @@ public class ProductMaintServlet extends HttpServlet {
              session.removeAttribute("product");
          }
          
-        return "/product.jsp";
+        return "/admin/product.jsp";
      }
     
     public String updateProduct(HttpServletRequest request,
@@ -101,7 +101,7 @@ public class ProductMaintServlet extends HttpServlet {
         List<Product> products = ProductDB.selectProducts();
         session.setAttribute("products", products);
         
-        return "/displayProducts.jsp";
+        return "/admin/displayProducts.jsp";
     }
 
      public String deleteProduct(HttpServletRequest request,
@@ -129,7 +129,7 @@ public class ProductMaintServlet extends HttpServlet {
          }
          
          
-        return "/displayProducts.jsp";
+        return "/admin/displayProducts.jsp";
     }
         
         public String confirmProduct(HttpServletRequest request,
@@ -153,7 +153,7 @@ public class ProductMaintServlet extends HttpServlet {
              session.removeAttribute("product");
          }
          
-        return "/confirm.jsp";
+        return "/admin/confirm.jsp";
         
      }
 }
